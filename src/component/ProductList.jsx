@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Cart from "./Cart"
 
 const data = [
   { id: 1, name: "dell", price: 60 },
@@ -71,9 +72,7 @@ function ProductList() {
           </div>
         ))}
       </div>
-      <div style={{ width: "50%" }}>
-        <h5>cart : {cartData.length}</h5>
-      </div>
+         <Cart cartData={cartData}/>
     </div>
   );
 }
