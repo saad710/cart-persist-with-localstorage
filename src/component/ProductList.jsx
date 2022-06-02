@@ -72,7 +72,7 @@ function ProductList() {
           </div>
         ))}
       </div>
-         <Cart cartData={cartData}/>
+         <Cart cartData={cartData} setCartData={setCartData}/>
     </div>
   );
 }
