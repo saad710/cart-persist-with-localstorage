@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Cart from "./Cart"
+import Cart from "./Cart";
+import { useDispatch, useSelector } from "react-redux";
+import { StorageToCart, addToCart, FirstItemToCart, fetchRecord } from './../redux/action/cartAction';
 
 const data = [
   { id: 1, name: "dell", price: 60 },
@@ -10,12 +12,21 @@ const data = [
 ];
 
 function ProductList() {
-  const [cartData, setCartData] = useState([]);
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(fetchRecord());
+  }, [dispatch]);
+  const cartData = useSelector((state) => state.CartReducer?.cartData);
+  console.log(cartData);
+
+  // const [cartData, setCartData] = useState([]);
   const [isInitiallyFetched, setIsInitiallyFetched] = useState(false);
 
   useEffect(() => {
     let prev_items = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartData(prev_items);
+    // setCartData(prev_items);
+    dispatch(StorageToCart(prev_items))
     setIsInitiallyFetched(true);
   }, []);
 
@@ -35,19 +46,21 @@ function ProductList() {
       quantity = quantity + 1;
       product.quantity = quantity;
       const newItem = [...cartData, product];
-      setCartData(newItem);
+      // setCartData(newItem);
+      dispatch(FirstItemToCart(newItem))
     } else {
       // console.log(product.quantity)
       // product.quantity = product.quantity + 1;
-      setCartData(
-        cartData.map((cart) => {
-          if (cart.id === product.id) {
-            return { ...cart, quantity: cart.quantity + 1 };
-          } else {
-            return { ...cart };
-          }
-        })
-      );
+      // setCartData(
+      //   cartData.map((cart) => {
+      //     if (cart.id === product.id) {
+      //       return { ...cart, quantity: cart.quantity + 1 };
+      //     } else {
+      //       return { ...cart };
+      //     }
+      //   })
+      // );
+      dispatch(addToCart(product.id))
     }
   };
   console.log(cartData);
@@ -72,7 +85,7 @@ function ProductList() {
           </div>
         ))}
       </div>
-         <Cart cartData={cartData} setCartData={setCartData}/>
+         <Cart cartData={cartData} />
     </div>
   );
 }

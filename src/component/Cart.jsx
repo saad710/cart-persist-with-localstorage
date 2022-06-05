@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { StorageToCart, addToCart,RemoveFromCart } from './../redux/action/cartAction';
 
 function Cart(props) {
-  const { cartData,setCartData } = props;
+  const dispatch = useDispatch();
+  const { cartData} = props;
   const [Subtotal,setSubtotal] = useState(0)
   console.log(cartData)
   useEffect(() => {
@@ -15,26 +18,28 @@ function Cart(props) {
 
   const handleAddQuantity = (cartProduct) => {
     console.log(cartProduct)
-    const quantityValue = cartProduct.quantity + 1;
-    setCartData(cartData?.map(cart => {
-      if(cartProduct.id === cart.id){
-        return {...cart, quantity: quantityValue }
-      }
-      else{
-        return {...cart}
-      }
-    }))
+    // const quantityValue = cartProduct.quantity + 1;
+    // setCartData(cartData?.map(cart => {
+    //   if(cartProduct.id === cart.id){
+    //     return {...cart, quantity: quantityValue }
+    //   }
+    //   else{
+    //     return {...cart}
+    //   }
+    // }))
+    dispatch(addToCart(cartProduct.id))
   }
   const handleReduceQuantity = (cartProduct) => {
-    const quantityValue = cartProduct.quantity - 1;
-    setCartData(cartData?.map(cart => {
-      if(cartProduct.id === cart.id){
-        return {...cart, quantity: Math.sign(quantityValue) === 1 ? quantityValue : 0  }
-      }
-      else{
-        return {...cart}
-      }
-    }))
+    // const quantityValue = cartProduct.quantity - 1;
+    // setCartData(cartData?.map(cart => {
+    //   if(cartProduct.id === cart.id){
+    //     return {...cart, quantity: Math.sign(quantityValue) === 1 ? quantityValue : 0  }
+    //   }
+    //   else{
+    //     return {...cart}
+    //   }
+    // }))
+    dispatch(RemoveFromCart(cartProduct.id))
 
   }
   return (
