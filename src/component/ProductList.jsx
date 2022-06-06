@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Cart from "./Cart";
 import { useDispatch, useSelector } from "react-redux";
-import { StorageToCart, addToCart, FirstItemToCart, fetchRecord } from './../redux/action/cartAction';
-
-const data = [
-  { id: 1, name: "dell", price: 60 },
-  { id: 2, name: "hp", price: 70 },
-  { id: 3, name: "acer", price: 40 },
-  { id: 4, name: "asus", price: 50 },
-  { id: 5, name: "lenovo", price: 45 },
-];
+import {
+  StorageToCart,
+  addToCart,
+  FirstItemToCart,
+  
+} from "./../redux/action/cartAction";
+import { fetchRecord } from "../redux/action/productAction";
 
 function ProductList() {
   const dispatch = useDispatch();
@@ -17,16 +15,16 @@ function ProductList() {
   React.useEffect(() => {
     dispatch(fetchRecord());
   }, [dispatch]);
+  const productData = useSelector((state) => state.ProductReducer?.productData);
+  console.log(productData)
   const cartData = useSelector((state) => state.CartReducer?.cartData);
   console.log(cartData);
 
-  // const [cartData, setCartData] = useState([]);
   const [isInitiallyFetched, setIsInitiallyFetched] = useState(false);
 
   useEffect(() => {
     let prev_items = JSON.parse(localStorage.getItem("cart")) || [];
-    // setCartData(prev_items);
-    dispatch(StorageToCart(prev_items))
+    dispatch(StorageToCart(prev_items));
     setIsInitiallyFetched(true);
   }, []);
 
@@ -46,21 +44,9 @@ function ProductList() {
       quantity = quantity + 1;
       product.quantity = quantity;
       const newItem = [...cartData, product];
-      // setCartData(newItem);
-      dispatch(FirstItemToCart(newItem))
+      dispatch(FirstItemToCart(newItem));
     } else {
-      // console.log(product.quantity)
-      // product.quantity = product.quantity + 1;
-      // setCartData(
-      //   cartData.map((cart) => {
-      //     if (cart.id === product.id) {
-      //       return { ...cart, quantity: cart.quantity + 1 };
-      //     } else {
-      //       return { ...cart };
-      //     }
-      //   })
-      // );
-      dispatch(addToCart(product.id))
+      dispatch(addToCart(product.id));
     }
   };
   console.log(cartData);
@@ -68,7 +54,7 @@ function ProductList() {
   return (
     <div style={{ width: "100%", display: "flex" }}>
       <div style={{ width: "50%" }}>
-        {data?.map((product, index) => (
+        {productData?.map((product, index) => (
           <div
             key={product.id}
             style={{ border: "1px solid red", margin: "1vh", padding: "1vh" }}
@@ -85,7 +71,7 @@ function ProductList() {
           </div>
         ))}
       </div>
-         <Cart cartData={cartData} />
+      <Cart cartData={cartData} />
     </div>
   );
 }

@@ -2,7 +2,7 @@ const INIT_STATE = {
     cartData: []
 }
 
-const userDataReducer = (state =INIT_STATE ,action) => {
+const CartReducer = (state =INIT_STATE ,action) => {
     //  console.log(state)
      switch(action.type){
                 case 'fetchCartData':
@@ -53,4 +53,4 @@ const userDataReducer = (state =INIT_STATE ,action) => {
                     return state;
             }
  }
- export default userDataReducer;
+ export default CartReducer;
